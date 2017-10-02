@@ -1,3 +1,16 @@
-.container, .container > .row {
+body > .container, .container > .row {
     height: 100%;
+}
+
+button[type="submit"] {
+width: 100%;
+}
+
+.form-container {
+    padding: 15px 0;
+    border: 1px solid #e6e6e6;
+}
+
+.form-state {
+    margin-bottom: 5px;
 }

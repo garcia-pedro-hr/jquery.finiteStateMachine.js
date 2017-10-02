@@ -10,128 +10,136 @@
 
     $.fn.formMachine = function (options) {
         var settings = $.extend({
-            stateSelector   : '.form-state',
-            nextSelector    : '.form-next',
-            prevSelector    : '.form-prev',
-            initialSelector : '.form-init',
-            finalSelector   : '.form-final',
-            fadeSpeed       : 300,
-            multiple        : false,
-            before          : null,
-            callback        : null
+            stateSelector: '.form-state',
+            nextSelector: '.form-next',
+            prevSelector: '.form-prev',
+            initialSelector: '.form-initial',
+            finalSelector: '.form-final',
+            fadeSpeed: 300,
+            multiple: false,
+            before: null,
+            callback: null
         }, options);
+
+        var $form = this;
+        var $states = $form.find(settings.stateSelector);
+        var $next = $form.find(settings.nextSelector);
+        var $prev = $form.find(settings.prevSelector);
+
+        var stateData = $states.map(function () {
+            return $(this).hide().data('state');
+        }).get();
         
-        var $form   = this;
-        var $states = $(settings.stateSelector);
-        var $next   = $(settings.nextSelector);
-        var $prev   = $(settings.prevSelector);
-        
-        var stateData = $(settings.stateSelector).map(function() {
-                return $(this).css('display', 'none').data('state-index');
-            }).get();
-        
+        var stateStack= []; // for complex machine behavior
+
         if (!settings.multiple) {
             // Simple machine behavior
             var start = Math.min.apply(Math, stateData);
-            var end   = Math.max.apply(Math, stateData)
+            var end = Math.max.apply(Math, stateData)
             var curr_state = start;
-
-            getState(curr_state).removeAttr('style');
+            
+            $form.getState(curr_state).show();
             $prev.prop('disabled', true);
-                        
-            $next.click(function() {
-                if (settings.before) 
+
+            $next.click(function () {
+                if (settings.before)
                     settings.before();
-                
+
                 $prev.prop('disabled', false);
-                
-                getState(curr_state).fadeOut(settings.fadeSpeed, function() {
+
+                $form.getState(curr_state).fadeOut(settings.fadeSpeed, function () {
                     do {
-                        curr_state++
-                    } while (getState(curr_state).length == 0);
-                    
-                    getState(curr_state).fadeIn(settings.fadeSpeed);
-                    
+                        curr_state++;
+                    } while ($form.getState(curr_state).length == 0);
+
+                    $form.getState(curr_state).fadeIn(settings.fadeSpeed);
+
                     if (curr_state == end)
                         $next.prop('disabled', true);
-                    
-                    if (settings.callback) 
+
+                    if (settings.callback)
                         settings.callback();
                 });
             });
-            
-            $prev.click(function() {
-                if (settings.before) 
+
+            $prev.click(function () {
+                if (settings.before)
                     settings.before();
-                
+
                 $next.prop('disabled', false);
-                
-                getState(curr_state).fadeOut(settings.fadeSpeed, function() {
+
+                $form.getState(curr_state).fadeOut(settings.fadeSpeed, function () {
                     do {
-                        curr_state--
-                    } while (getState(curr_state).length == 0);
-                    
-                    getState(curr_state).fadeIn(settings.fadeSpeed);
-                    
+                        curr_state--;
+                    } while ($form.getState(curr_state).length == 0);
+
+                    $form.getState(curr_state).fadeIn(settings.fadeSpeed);
+
                     if (curr_state == start)
                         $prev.prop('disabled', true);
-                    
-                    if (settings.callback) 
-                        settings.callback(); 
+
+                    if (settings.callback)
+                        settings.callback();
                 });
             });
         } else {
             // Complex machine behavior
-            var $curr_state = $(settings.initialSelector);
-            $curr_state.removeAttr('style');
+            var $curr_state = $form.find(settings.initialSelector);
+            $curr_state.show();
             $prev.prop('disabled', true);
-            
-            $next.click(function() {
+
+            $next.click(function () {
                 if (settings.before)
                     settings.before();
-                
+
+                stateStack.push($curr_state);
                 $prev.prop('disabled', false);
-                
-                $curr_state.fadeOut(settings.fadeSpeed, function() {
+
+                $curr_state.fadeOut(settings.fadeSpeed, function () {
                     var next = window[$curr_state.data('evaluator')]();
-                    $curr_state = getState(next);
-                    
+                    console.log(next);
+                    $curr_state = $form.getState(next);
+
                     $curr_state.fadeIn(settings.fadeSpeed);
-                    
+
                     if ($curr_state.hasClass(settings.finalSelector))
                         $next.prop('disabled', true);
 
                     if (settings.callback)
-                        settings.callback(); 
+                        settings.callback();
                 });
             });
-            
-            $prev.click(function() {
+
+            $prev.click(function () {
                 if (settings.before)
                     settings.before();
-                
+
                 $next.prop('disabled', false);
-                
-                $curr_state.fadeOut(settings.fadeSpeed, function() {
-                    var next = window[$curr_state.data('evaluator')]();
-                    $curr_state = getState(next);
-                    
+
+                $curr_state.fadeOut(settings.fadeSpeed, function () {
+                    var $next = stateStack.pop();
+                    $curr_state = $next
+
                     $curr_state.fadeIn(settings.fadeSpeed);
-                    
+
                     if ($curr_state.hasClass(settings.initialSelector))
                         $prev.prop('disabled', true);
-                    
+
                     if (settings.callback)
                         settings.callback();
                 });
             });
         }
-        
+
         $form.addClass('machined');
     };
-    
-    function getState(index) {
-        return $('div').find('[data-state="' + index + '"]');
+
+    $.fn.getState = function (index) {
+        return this.find('.form-state[data-state="' + index + '"]');
     }
     
-} (jQuery));
+    $.fn.getCurrentState = function () {
+        console.log(this.find('.form-state:visible'));
+    }
+
+}(jQuery));

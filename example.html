@@ -15,8 +15,9 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-4 align-self-center" style="border">
-                <form>
+            <div class="col-md-8 align-self-center" style="border">
+                <h2>Simple Machine Example</h2>
+                <form id="sm">
                     <div class="row">
                         <div class="form-state" data-state="1">
                             <div class="form-group">
@@ -47,13 +48,94 @@
                         <button type="button" class="btn btn-primary form-prev">Prev</button>
                         <button type="button" class="btn btn-primary form-next">Next</button>
                     </div>
-                  
                 </form>
+                
+                <h2>Complex Machine Example</h2>
+                <div class="row form-container">
+                    <div class="col-md-12">
+                        <form id="cm">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-state form-initial" data-state="1" data-evaluator="evaluatorFunc">
+                                        <h4>Report a Problem</h4>
+                                        <div class="form-group">
+                                            <label for="select1">What's wrong?</label>
+                                            <select class="form-control" id="select1">
+                                                <option value="1">Bad UX</option>
+                                                <option value="2">Bug</option>
+                                                <option value="3">Abuse</option>
+                                            </select>
+                                        </div>   
+                                    </div>
+
+                                    <div class="form-state" data-state="2" data-evaluator="evaluatorFunc">
+                                        <div class="form-group">
+                                            <label for="badUXinput">Tell us more about your issue</label>
+                                            <textarea class="form-control" id="badUXinput" rows="3"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-state" data-state="3" data-evaluator="evaluatorFunc">
+                                        <div class="form-group">
+                                            <label for="screenshotFile">Screenshot file (.jpg, .jpeg, .png or .bmp)</label>
+                                            <input type="file" class="form-control-file" id="exampleInputFile" aria-describedby="fileHelp">
+                                            <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-state" data-state="4" data-evaluator="evaluatorFunc">
+                                        <div class="form-group">
+                                            <label for="bugInput">Example textarea</label>
+                                            <textarea class="form-control" id="bug" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-state" data-state="5" data-evaluator="evaluatorFunc">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                    
+                                    <div class="form-state .form-final" data-state="6">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+
+                                    <div class="row justify-content-between">
+                                        <div class="col-md">
+                                            <button type="button" class="btn btn-primary form-prev">&lt;&lt; Prev</button>
+                                        </div>
+                                        <div class="col-md">
+                                            <button type="button" class="btn btn-primary form-next float-right">Next &gt;&gt;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
     <script>
-        $('form').formMachine({ });
+        $('#sm').formMachine();
+        $('#cm').formMachine({
+            multiple: true
+        });
+        
+        function evaluatorFunc () {
+            switch ($('#cm').getCurrentState().data('state')) {
+                case 1:
+                    return 2;
+                case 2:
+                    if ($('#select1').val == '1')
+                        return 4;
+                    else
+                        return 5;
+                case 3:
+                    return 5;
+                case 4:
+                case 5:
+                    return 6;
+            }  
+        };        
     </script>
 </body>

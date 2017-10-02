@@ -18,7 +18,7 @@
             <div class="col-md-4 align-self-center" style="border">
                 <form>
                     <div class="row">
-                        <div class="form-state" data-state-index="1">
+                        <div class="form-state" data-state="1">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email address</label>
                                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
@@ -31,7 +31,7 @@
                             </div>
                         </div>
 
-                        <div class="form-state" data-state-index="2">
+                        <div class="form-state" data-state="2">
                             <div class="form-group">
                                 <label for="exampleTextarea">Example textarea</label>
                                 <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
@@ -54,6 +54,6 @@
     </div>
     
     <script>
-        $('form').formMachine();
+        $('form').formMachine({ });
     </script>
 </body>

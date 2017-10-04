@@ -1,3 +1,7 @@
+body {
+    background-color: aliceblue;
+}
+
 body > .container, .container > .row {
     height: 100%;
 }
@@ -6,11 +10,13 @@ button[type="submit"] {
 width: 100%;
 }
 
-.form-container {
+.fsm-container {
     padding: 15px 0;
+    margin-bottom: 15px;
     border: 1px solid #e6e6e6;
+    background-color: white;
 }
 
-.form-state {
-    margin-bottom: 5px;
+.fsm-state {
+    margin: 15px 0;
 }

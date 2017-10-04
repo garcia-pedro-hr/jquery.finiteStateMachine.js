@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="row fsm-container">
                     <div class="col-md-12">
                         <h2>Complex Machine Example</h2>
@@ -71,7 +71,7 @@
                                                 <option value="2">Bug</option>
                                                 <option value="3">Abuse</option>
                                             </select>
-                                        </div>   
+                                        </div>
                                     </div>
 
                                     <div class="fsm-state" data-state="2" data-evaluator="evaluatorFunc">
@@ -88,7 +88,7 @@
                                             <small id="fileHelp1" class="form-text text-muted">.jpg, .jpeg, .png or .bmp</small>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="fsm-state" data-state="4" data-evaluator="evaluatorFunc">
                                         <div class="form-group">
                                             <label for="inputFile">Any files you wish to send with your report?</label>
@@ -96,7 +96,7 @@
                                             <small id="fileHelp2" class="form-text text-muted">Any extension.</small>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="fsm-state fsm-final" data-state="5" data-evaluator="evaluatorFunc">
                                         <p>Thank you for your feedback. We will be analyzing it soon.</p>
                                         <p>Please click in the submit button below to send your feedback.</p>
@@ -105,10 +105,10 @@
 
                                     <div class="row justify-content-between">
                                         <div class="col-md">
-                                            <button type="button" class="btn btn-primary fsm-prev">&lt;&lt; Prev</button>
+                                            <button id="fsm-prev" type="button" class="btn btn-primary">&lt;&lt; Prev</button>
                                         </div>
                                         <div class="col-md">
-                                            <button type="button" class="btn btn-primary fsm-next float-right">Next &gt;&gt;</button>
+                                            <button id="fsm-next" type="button" class="btn btn-primary fsm-next float-right">Next &gt;&gt;</button>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         $('#sm').finiteStateMachine({
             linear: true,
@@ -127,8 +127,11 @@
                 $('#sm').css('color', getRandomColor());
             }
         });
-        
-        $('#cm').finiteStateMachine();
+
+        $('#cm').finiteStateMachine({
+            prevSelector: '#fsm-prev',
+            nextSelector: '#fsm-next'
+        });
 
         function evaluatorFunc () {
             switch ($('#cm').getCurrentState().data('state')) {
@@ -143,7 +146,7 @@
                     return 4;
                 case 4:
                     return 5;
-            }  
+            }
         };
 
         function getRandomColor() {

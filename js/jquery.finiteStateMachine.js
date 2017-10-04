@@ -24,8 +24,8 @@
 
         var $fsm = this;
         var $states = $fsm.find(settings.stateSelector);
-        var $next_button = $fsm.find(settings.nextSelector);
-        var $prev_button = $fsm.find(settings.prevSelector);
+        var $next_button = $(settings.nextSelector);
+        var $prev_button = $(settings.prevSelector);
 
         var stateData = $states.map(function () {
             return $(this).hide().data('state');
